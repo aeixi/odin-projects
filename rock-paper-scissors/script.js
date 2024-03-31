@@ -12,17 +12,17 @@ function playRound(playerChoice, computerChoice) {
                 return "You tied!";
             }
             else if (computerChoice == "paper") {
-                return "You lose! Paper beats rock!" 
+                return "You lose! Paper beats rock!";
             }
             else {
-                return "You win! Rock beats scissors!"
+                return "You win! Rock beats scissors!";
             }
         case "paper":
             if (computerChoice == "rock") {
                 return "You Win! Paper beats rock!";
             }
             else if (computerChoice == "paper") {
-                return "You tied!" 
+                return "You tied!";
             }
             else {
                 return "You lose! Scissors beats paper!"
@@ -32,10 +32,10 @@ function playRound(playerChoice, computerChoice) {
                 return "You lose! Rock beats scissors!!";
             }
             else if (computerChoice == "paper") {
-                return "You win! Scissors beats paper!" 
+                return "You win! Scissors beats paper!";
             }
             else {
-                return "You tied!"
+                return "You tied!";
             }
         default:
             return playerChoice + " is not a valid option!"
