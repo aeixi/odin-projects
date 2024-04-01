@@ -6,20 +6,17 @@ function getComputerChoice() {
 
 function playRound(playerChoice, computerChoice) {
     playerChoice = playerChoice.toLowerCase();
-    switch (playerChoice) {
-        case "rock":
-            if (computerChoice == "rock") {
-                return "You tied!";
+    if (playerChoice == computerChoice) {
+        return "tie";
             }
-            else if (computerChoice == "paper") {
-                return "You lose! Paper beats rock!";
+    else if (playerChoice == "rock" && computerChoice == "scissors" ||
+    playerChoice == "paper" && computerChoice == "scissors" ||
+    playerChoice == "scissors" && computerChoice == "rock") {
+        return "win";
             }
             else {
-                return "You win! Rock beats scissors!";
+        return "lose";
             }
-        case "paper":
-            if (computerChoice == "rock") {
-                return "You Win! Paper beats rock!";
             }
             else if (computerChoice == "paper") {
                 return "You tied!";
