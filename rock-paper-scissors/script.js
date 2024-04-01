@@ -8,37 +8,47 @@ function playRound(playerChoice, computerChoice) {
     playerChoice = playerChoice.toLowerCase();
     if (playerChoice == computerChoice) {
         return "tie";
-            }
+    }
     else if (playerChoice == "rock" && computerChoice == "scissors" ||
     playerChoice == "paper" && computerChoice == "scissors" ||
     playerChoice == "scissors" && computerChoice == "rock") {
         return "win";
-            }
-            else {
+    }
+    else {
         return "lose";
-            }
-            }
-            else if (computerChoice == "paper") {
-                return "You tied!";
-            }
-            else {
-                return "You lose! Scissors beats paper!"
-            }
-        case "scissors":
-            if (computerChoice == "rock") {
-                return "You lose! Rock beats scissors!!";
-            }
-            else if (computerChoice == "paper") {
-                return "You win! Scissors beats paper!";
-            }
-            else {
-                return "You tied!";
-            }
-        default:
-            return playerChoice + " is not a valid option!"
-    } 
+    }
 }
 
-let playerChoice = "rock";
+function playGame() {
+    let playerScore = 0;
+    let computerScore = 0;
 
-console.log(playRound(playerChoice, getComputerChoice()));
+    while (playerScore < 3 && computerScore < 3) {
+        let playerChoice = prompt("Enter rock, paper, or scissors: ");
+        let computerChoice = getComputerChoice();
+        let result = playRound(playerChoice, computerChoice);
+
+        switch (result) {
+            case ("win"):
+                console.log("You have won! " + playerChoice + " beats " + computerChoice);
+                playerScore++;
+                break;
+            case ("lose"):
+                console.log("You have lost! "  + playerChoice + " beats " + computerChoice);
+                computerScore++;
+                break;
+            case ("tie"):
+                console.log("You tied!");
+                break;
+        }
+    }
+
+    if (playerScore == 3) {
+        console.log("You have won!");
+    }
+    else if (computerScore == 3) {
+        console.log("You have lost!");
+    }
+}
+
+playGame();
