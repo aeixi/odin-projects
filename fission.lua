@@ -25,20 +25,23 @@ end
 function reactorOFF ()
     setBurnRate()
 
-    if energyLevel == 100 and state == 2 then
-        print('Energy full! Disabling reactor...')
-        rednet.broadcast('Energy full! Disabling reactor...')
-        reactor.scram()
-    elseif heatedCoolantLevel > 25 then
-        print('Coolant backup! Pausing reactor...')
-        rednet.broadcast('Coolant backup! Pausing reactor...')
-        reactor.scram()
+    while energyLevel < 100 and state == 2 do
+        if energyLevel == 100 then
+            print('Energy full! Disabling reactor...')
+            rednet.broadcast('Energy full! Disabling reactor...')
+            reactor.scram()
+            state = 0
+        elseif heatedCoolantLevel > 25 then
+            print('Coolant backup! Pausing reactor...')
+            rednet.broadcast('Coolant backup! Pausing reactor...')
+            reactor.scram()
 
-        while heatedCoolantLevel > 0 do
-            sleep(5)
+            while heatedCoolantLevel > 0 do
+                sleep(5)
+            end
+
+            reactor.activate()
         end
-
-        reactor.activate()
     end
 end
 
@@ -58,7 +61,7 @@ while true do
         rednet.open('left')
     end
 
-    if energyLevel >= 70 and state == 0 then
+    if energyLevel >= 70 and not reactorStatus then
         print('Energy levels normal.')
         rednet.broadcast('Energy levels normal.')
         state = 1
