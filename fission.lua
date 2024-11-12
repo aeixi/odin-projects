@@ -20,6 +20,7 @@ function updateInfo ()
     energyLevel = turbine.getEnergyFilledPercentage() * 100
     reactorStatus = reactor.getStatus()
     heatedCoolantLevel = reactor.getHeatedCoolantFilledPercentage() * 100
+    fuelLevel = reactor.getFuelFilledPercentage() * 100
 end
 
 function reactorOFF ()
@@ -27,13 +28,11 @@ function reactorOFF ()
 
     while energyLevel < 100 and state == 2 do
         if energyLevel == 100 then
-            print('Energy full! Disabling reactor...')
-            rednet.broadcast('Energy full! Disabling reactor...')
+            broadcast('Energy full! Disabling reactor...')
             reactor.scram()
             state = 0
         elseif heatedCoolantLevel > 25 then
-            print('Coolant backup! Pausing reactor...')
-            rednet.broadcast('Coolant backup! Pausing reactor...')
+            broadcast('Coolant backup! Pausing reactor...')
             reactor.scram()
 
             while heatedCoolantLevel > 0 do
@@ -47,11 +46,15 @@ end
 
 function reactorON ()
     if energyLevel < 70 and state == 1 then
-        print('Energy levels below 70%, activating reactor...')
-        rednet.broadcast('Energy levels below 70%, activating reactor...')
+        broadcast('Energy levels below 70%, activating reactor...')
         reactor.activate()
         state = 2
     end
+end
+
+function broadcast(msg)
+    print(msg)
+    rednet.broadcast(msg)
 end
 
 while true do
@@ -61,11 +64,27 @@ while true do
         rednet.open('left')
     end
 
+    if fuelLevel == 0 then
+        broadcast('Fuel is empty!')
+        if reactorStatus then
+            broadcast('Shutting down reactor!')
+            reactor.scram()
+        end
+    elseif fuelLevel <= 5 then
+        broadcast('Fuel levels critical!')
+    elseif fuelLevel <= 25 then
+        broadcast('Fuel is below 25%!')
+    elseif fuelLevel <= 50 then
+        broadcast('Fuel is below 50%!')
+    end
+
     if energyLevel >= 70 and not reactorStatus then
-        print('Energy levels normal.')
-        rednet.broadcast('Energy levels normal.')
+        broadcast('Energy levels normal.')
+        state = 1
+    elseif energyLevel < 70 then
         state = 1
     end
 
     parallel.waitForAny(reactorOFF, reactorON)
+
 end
